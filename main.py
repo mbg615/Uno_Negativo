@@ -4,8 +4,8 @@ from pyglet import app, shapes, graphics, image, sprite
 winWidth = 800
 winHeight = 600
 fus = 1
-logoImage = image.load("C:/Users/Michael/Desktop/Uno_Negativo-master/UnoNegativo.png")
-Red = (255, 0, 0)
+logoImage = image.load("UnoNegativoLogoFinal.png")
+BgColor = (238, 21, 31)
 window = Window(winWidth, winHeight, resizable = True)
 batch = graphics.Batch()
 background = graphics.OrderedGroup(0)
@@ -33,7 +33,7 @@ def on_key_press(symbol, modifiers):
     if symbol == key.F:
         global fus
         fus += 1
- 
+
 def on_key_release(symbol, modifiers):
     if symbol == key.F and fus % 2 == 0:
         window.set_fullscreen(True) 
@@ -46,15 +46,12 @@ def on_key_release(symbol, modifiers):
         menuReturn()
 
 
-mainBackground = shapes.Rectangle(0, 0, winWidth, winHeight, Red, batch=batch, group=background)
-mainBackground.opacity = 220
-
+mainBackground = shapes.Rectangle(0, 0, winWidth, winHeight, BgColor, batch=batch, group=background)
 
 def on_draw():
     window.clear()
     batch.draw()
     logo.draw()
-
 
 logo = sprite.Sprite(logoImage, 250, 350, group=foreground)
 
