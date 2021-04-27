@@ -4,7 +4,7 @@ from pyglet import app, shapes, graphics, image, sprite
 winWidth = 800
 winHeight = 600
 fus = 1
-logoImage = image.load("UnoNegativoLogoFinal.png")
+logoImage = image.load("data/UnoNegativoLogoFinal.png")
 BgColor = (238, 21, 31)
 window = Window(winWidth, winHeight, resizable = True)
 batch = graphics.Batch()

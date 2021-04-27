@@ -1,3 +1,4 @@
 def makeDeck(decksUsed):
     cardPool = []
-    cardFile = open("~/progz/Uno_Negativo/cards.txt", "r")
+    cardFile = open("data/cards.txt","r")
+    print(cardPool)
