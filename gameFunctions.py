@@ -19,8 +19,22 @@ def drawCardFinite(deck):
         deck = makeDeck()
     return card, deck
 
+# Draw infinite cards (Does not respect a typical deck)
 def drawCardInfinite(deck):
     from random import randrange
     randNum = randrange(len(deck))
     card = deck[randNum]
     return card
+
+# Create the list of player's order
+def playerList(numOfPlayers):
+    playerOrder = []
+    playerOrder.extend(range(0,numOfPlayers))
+    return playerOrder
+
+# Cycles the player list by one value
+def playerCycle(playerList):
+    storeVal = playerList[0]
+    playerList.pop(0)
+    playerList.append(storeVal)
+    return playerList
