@@ -4,7 +4,7 @@ from pyglet import app, shapes, graphics, image, sprite
 winWidth = 800
 winHeight = 600
 fus = 1
-logoImage = image.load("C:/Users/Michael/Desktop/Uno_Negativo-master/UnoNegativo.png")
+logoImage = image.load("data/UnoNegativoLogoFinal.png")
 Red = (255, 0, 0)
 Blue = (0, 0 ,255)
 window = Window(winWidth, winHeight, resizable = True)
