@@ -2,8 +2,11 @@ import gameFunctions
 
 def main():
     # Create player order and card deck
-    playerList = gameFunctions.playerList(4)
-    cardDeck = gameFunctions.makeDeck()
+    playerSelect = int(input("How many players do you have? "))
+    deckType = int(input("Infinite deck (0) or realistic deck (1) "))
+    cardDeck = gameFunctions.Deck.makeDeck()
+    playerList = gameFunctions.Player.playerList(playerSelect)
+    
     
 
 if __name__ == "__main__":
