@@ -107,24 +107,26 @@ def loadButtons(mouseX, mouseY):
     #adiosButton.boundary(mousePos)
 
 
-
+#Actions on mouse click; pulls boundary of buttons to make it clickable.
 def on_mouse_press(mouseX, mouseY, button, modifiers):
 
     loadButtons(mouseX, mouseY)
 
+#Declares main background.
 mainBackground = shapes.Rectangle(0, 0, winWidth, winHeight, Red, batch=batch, group=menuBackground)
 mainBackground.opacity = 220
 
-
-#testButton = shapes.Rectangle(250, 100, 50, 50, Blue, batch=batch, group=menuForeground)
-
+#Draws all graphics; background, buttons logo, etc.
 def on_draw():
     window.clear()
     batch.draw()
     logo.draw()
 
+#Declares Logo
 logo = sprite.Sprite(logoImage, 250, 350, group=menuForeground)
 
+#Allows window to use events; drawing, clicking, pressing of buttons.
 window.push_handlers(on_draw, on_key_press, on_key_release, on_mouse_press)
-        
+     
+#Launches code as an app.
 app.run()
