@@ -1,6 +1,7 @@
 from pyglet.window import Window, key, mouse
 from pyglet import app, shapes, graphics, image, sprite
 
+#Declares variables; window, colors, png's, etc.
 winWidth = 800
 winHeight = 600
 fus = 1
@@ -10,33 +11,43 @@ Blue = (0, 0 ,255)
 window = Window(winWidth, winHeight, resizable = True)
 batch = graphics.Batch()
 
+#Creates groups for foreground and background.
 menuBackground = graphics.OrderedGroup(0)
 menuForeground = graphics.OrderedGroup(1)
 
+#Updates background according to fullscreen.
 def backgroundUpdate():
     winSize = window.get_size()
     (winWidth, winHeight) = winSize
     mainBackground.width = winWidth
     mainBackground.height = winHeight
 
+#Updates menu according to fullscreen.
 def menuUpdate():
     winSize = window.get_size()
     (winWidth, winHeight) = winSize
     logo.x = logo.x + (winWidth  // 4)
     logo.y = logo.y + (winHeight // 3)
 
+#Returns menu on removal of fullscreen.
 def menuReturn():
     winSize = window.get_size()
     (winWidth, winHeight) = winSize
     logo.x = 250
     logo.y = 350
 
+#Actions that occur on key press.
 def on_key_press(symbol, modifiers):
+    
+    #If F pressed, increase fus so that it changes what happens on key press.
     if symbol == key.F:
         global fus
         fus += 1
  
+#Actions that occur on key release
 def on_key_release(symbol, modifiers):
+    
+    #If F released, toggles Fullscreen
     if symbol == key.F and fus % 2 == 0:
         window.set_fullscreen(True) 
         backgroundUpdate()
@@ -47,6 +58,7 @@ def on_key_release(symbol, modifiers):
         backgroundUpdate()
         menuReturn()
 
+#Test actions for buttons (Hola and adios)
 def hola():
     print("hola")
     return
@@ -55,8 +67,10 @@ def adios():
     print("adios")
     return
 
+#Class which creates button when given data.
 class buttonRect(object):
 
+    #Loads various aspects of the button like dimensions, color, and action.
     def __init__(self, x, y, width, height, color, action):
 
         self.x = x
@@ -72,6 +86,7 @@ class buttonRect(object):
         self.minY = y
         self.maxY = y + height
 
+    #Creates bounding box for the button.
     def boundary(self, mousePos):
 
         mouseX, mouseY = mousePos
@@ -79,9 +94,11 @@ class buttonRect(object):
         if mouseX > self.minX and mouseX < self.maxX and mouseY > self.minY and mouseY < self.maxY:
             eval(self.action + "()")
 
+#Creates test buttons.
 #holaButton = buttonRect(250, 100, 50, 50, Blue, "hola")
 #adiosButton = buttonRect(400, 200, 100, 100, Blue, "adios")
 
+#Loads buttons
 def loadButtons(mouseX, mouseY):
 
     mousePos = mouseX, mouseY
