@@ -94,7 +94,7 @@ class buttonRect(object):
         if mouseX > self.minX and mouseX < self.maxX and mouseY > self.minY and mouseY < self.maxY:
             eval(self.action + "()")
 
-#Creates test buttons.
+#Creates test buttons; x, y, width, height, color, function name.
 #holaButton = buttonRect(250, 100, 50, 50, Blue, "hola")
 #adiosButton = buttonRect(400, 200, 100, 100, Blue, "adios")
 
