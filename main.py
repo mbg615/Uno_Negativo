@@ -115,7 +115,7 @@ def on_mouse_press(mouseX, mouseY, button, modifiers):
     loadButtons(mouseX, mouseY)
 
 #Creates background of main menu.
-mainBackground = shapes.Rectangle(0, 0, winWidth, winHeight, Red, batch=batch, group=menuBackground)
+mainBackground = shapes.Rectangle(0, 0, winWidth, winHeight, BgColor, batch=batch, group=menuBackground)
 mainBackground.opacity = 220
 
 
