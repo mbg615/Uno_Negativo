@@ -6,7 +6,7 @@ winWidth = 800
 winHeight = 600
 fus = 1
 logoImage = image.load("data/UnoNegativoLogoFinal.png")
-Red = (255, 0, 0)
+BgColor = (238, 21, 31)
 Blue = (0, 0 ,255)
 window = Window(winWidth, winHeight, resizable = True)
 batch = graphics.Batch()
@@ -15,17 +15,19 @@ menuBackground = graphics.OrderedGroup(0)
 menuForeground = graphics.OrderedGroup(1)
 
 #Updates background according to fullscreen
+
 def backgroundUpdate():
     winSize = window.get_size()
     (winWidth, winHeight) = winSize
     mainBackground.width = winWidth
     mainBackground.height = winHeight
 
+
 #Updates logo/menu accroding to fullscreen 
 def menuUpdate():
     winSize = window.get_size()
     (winWidth, winHeight) = winSize
-    logo.x = logo.x + (winWidth  // 4)
+    logo.x = logo.x + (winWidth // 4)
     logo.y = logo.y + (winHeight // 3)
 
 #Returns menu upon removal of fullscreen
@@ -35,13 +37,15 @@ def menuReturn():
     logo.x = 250
     logo.y = 350
 
+    
 #Actions that require a button press
 def on_key_press(symbol, modifiers):
     #On F press, increases fus in order to change what f does on each press.
     if symbol == key.F:
         global fus
         fus += 1
- 
+        
+        
 #Actions that occur on button release
 def on_key_release(symbol, modifiers):
     
@@ -114,12 +118,15 @@ def on_mouse_press(mouseX, mouseY, button, modifiers):
 mainBackground = shapes.Rectangle(0, 0, winWidth, winHeight, Red, batch=batch, group=menuBackground)
 mainBackground.opacity = 220
 
+
 #Draws all graphics on window: background, buttons, logo, etc.
+
 def on_draw():
     window.clear()
     batch.draw()
     logo.draw()
-
+    
+    
 #Creates logo
 logo = sprite.Sprite(logoImage, 250, 350, group=menuForeground)
 
