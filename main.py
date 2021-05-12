@@ -1,84 +1,97 @@
 from pyglet.window import Window, key, mouse
 from pyglet import app, shapes, graphics, image, sprite
+import game
+import subprocess
 
-#Declares variables; window, colors, png's, etc.
+#Declaring colors, window, graphics, etc.
 winWidth = 800
 winHeight = 600
 fus = 1
 logoImage = image.load("data/UnoNegativoLogoFinal.png")
-Red = (255, 0, 0)
+BgColor = (238, 21, 31)
 Blue = (0, 0 ,255)
+fullscreen = False
 window = Window(winWidth, winHeight, resizable = True)
-batch = graphics.Batch()
+mainMenu = graphics.Batch()
 
-#Creates groups for foreground and background.
-menuBackground = graphics.OrderedGroup(0)
-menuForeground = graphics.OrderedGroup(1)
+mainBackground = graphics.OrderedGroup(0)
+mainForeground = graphics.OrderedGroup(1)  
 
-#Updates background according to fullscreen.
-def backgroundUpdate():
+#Updates main menu
+
+def mainMenuUpdate(fullscreen):
     winSize = window.get_size()
     (winWidth, winHeight) = winSize
-    mainBackground.width = winWidth
-    mainBackground.height = winHeight
 
-#Updates menu according to fullscreen.
-def menuUpdate():
-    winSize = window.get_size()
-    (winWidth, winHeight) = winSize
-    logo.x = logo.x + (winWidth  // 4)
-    logo.y = logo.y + (winHeight // 3)
+    if fullscreen == True:
+        logo.x = logo.x + (winWidth  // 4)
+        logo.y = logo.y + (winHeight // 3)
+        mainBackground.width = winWidth
+        mainBackground.height = winHeight
 
-#Returns menu on removal of fullscreen.
-def menuReturn():
-    winSize = window.get_size()
-    (winWidth, winHeight) = winSize
-    logo.x = 250
-    logo.y = 350
+        holaButton.x = holaButton.x + (winWidth  // 4)
+        holaButton.y = holaButton.y + (winHeight // 3)
+        holaButton.update()
 
-#Actions that occur on key press.
-def on_key_press(symbol, modifiers):
+        unoButton.x = unoButton.x + (winWidth  // 4)
+        unoButton.y = unoButton.y + (winHeight // 3)
+        unoButton.update()
+
+    if fullscreen == False:
+        logo.x = 250
+        logo.y = 350
+        mainBackground.width = winWidth
+        mainBackground.height = winHeight
+
+        unoButton.x = unoButton.storX
+        unoButton.y = unoButton.storY
+        unoButton.update()
+
+        unoButton.x = unoButton.storX
+        unoButton.y = unoButton.storY
+        unoButton.update()
+
     
-    #If F pressed, increase fus so that it changes what happens on key press.
+#Actions that require a button press
+def on_key_press(symbol, modifiers):
+    #On F press, increases fus in order to change what f does on each press.
     if symbol == key.F:
         global fus
         fus += 1
- 
-#Actions that occur on key release
+        
+        
+#Actions that occur on button release
 def on_key_release(symbol, modifiers):
     
-    #If F released, toggles Fullscreen
+    #After F is released, decides whether window needs to go fullscreen or return to normal.
     if symbol == key.F and fus % 2 == 0:
+        fullscreen = True
         window.set_fullscreen(True) 
-        backgroundUpdate()
-        menuUpdate()
+        mainMenuUpdate(fullscreen)
 
     if symbol == key.F and fus % 2 == 1:
+        fullscreen = False
         window.set_fullscreen(False)
-        backgroundUpdate()
-        menuReturn()
+        mainMenuUpdate(fullscreen)
 
-#Test actions for buttons (Hola and adios)
-def hola():
-    print("hola")
-    return
+#Both following functions are test actions for buttons
+def runGame():
+    game.main()
 
-def adios():
-    print("adios")
-    return
-
-#Class which creates button when given data.
+#Button class: given needed data, creates a button with a boundary, shape, and action to do.
 class buttonRect(object):
 
-    #Loads various aspects of the button like dimensions, color, and action.
-    def __init__(self, x, y, width, height, color, action):
+    #Loads various values of the button
+    def __init__(self, x, y, width, height, color, batch, group, action):
 
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.color = color
-        self.name = shapes.Rectangle(self.x, self.y, self.width, self.height, self.color, batch=batch, group=menuForeground)
+        self.batch = batch
+        self.group = group
+        self.name = shapes.Rectangle(self.x, self.y, self.width, self.height, self.color, batch = self.batch, group = self.group)
         self.action = action
 
         self.minX = x
@@ -86,47 +99,72 @@ class buttonRect(object):
         self.minY = y
         self.maxY = y + height
 
-    #Creates bounding box for the button.
+        self.storX = x
+        self.storY = y
+    
+
+
+    #Creates boundary of the button so that it can be clicked.
     def boundary(self, mousePos):
+
+        self.minX = self.x
+        self.maxX = self.x + self.width
+        self.minY = self.y
+        self.maxY = self.y + self.height
 
         mouseX, mouseY = mousePos
 
         if mouseX > self.minX and mouseX < self.maxX and mouseY > self.minY and mouseY < self.maxY:
             eval(self.action + "()")
 
-#Creates test buttons; x, y, width, height, color, function name.
-#holaButton = buttonRect(250, 100, 50, 50, Blue, "hola")
+        
+    def update(self):
+
+        self.name = shapes.Rectangle(self.x, self.y, self.width, self.height, self.color, batch = self.batch, group = self.group)
+
+
+#Creates test Buttons.
+holaButton = buttonRect(300, 250, 200, 50, Blue, mainMenu, mainForeground, "runGame")
+unoButton = buttonRect(300, 150, 200, 50, Blue, mainMenu, mainForeground, "runUno")
 #adiosButton = buttonRect(400, 200, 100, 100, Blue, "adios")
 
-#Loads buttons
-def loadButtons(mouseX, mouseY):
+
+
+def runUno():
+
+    subprocess.call(r"C:\Program Files (x86)\Steam\Steam.exe -applaunch 470220")
+
+
+#Loads the button boundary by getting the boundary function from the button class.
+def loadMenuBoxes(mouseX, mouseY):
 
     mousePos = mouseX, mouseY
 
-    #holaButton.boundary(mousePos)
-    #adiosButton.boundary(mousePos)
+    holaButton.boundary(mousePos)
+    unoButton.boundary(mousePos)
 
-
-#Actions on mouse click; pulls boundary of buttons to make it clickable.
+#Allows buttons to be clicked when mouse is in boundary
 def on_mouse_press(mouseX, mouseY, button, modifiers):
 
-    loadButtons(mouseX, mouseY)
+    loadMenuBoxes(mouseX, mouseY)
 
-#Declares main background.
-mainBackground = shapes.Rectangle(0, 0, winWidth, winHeight, Red, batch=batch, group=menuBackground)
+#Creates background of main menu.
+mainBackground = shapes.Rectangle(0, 0, winWidth, winHeight, BgColor, batch = mainMenu, group = mainBackground)
 mainBackground.opacity = 220
 
-#Draws all graphics; background, buttons logo, etc.
+
+#Draws all graphics on window: background, buttons, logo, etc.
+
 def on_draw():
     window.clear()
-    batch.draw()
-    logo.draw()
+    mainMenu.draw()
+    
+    
+#Creates logo
+logo = sprite.Sprite(logoImage, 250, 350, batch = mainMenu, group = mainForeground)
 
-#Declares Logo
-logo = sprite.Sprite(logoImage, 250, 350, group=menuForeground)
 
-#Allows window to use events; drawing, clicking, pressing of buttons.
+#Allows window to use all events such as the graphic creation, button presses, and mouse clicks.
 window.push_handlers(on_draw, on_key_press, on_key_release, on_mouse_press)
-     
-#Launches code as an app.
+        
 app.run()
