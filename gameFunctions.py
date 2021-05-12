@@ -1,3 +1,6 @@
+from pyglet.gl.glext_arb import PFNGLASYNCMARKERSGIXPROC
+
+
 class Deck:
     # Makes one standard Uno Deck from the cards.txt file
     def makeDeck():
@@ -46,9 +49,17 @@ class Player:
 
     # Give the player a list of 7 starting cards
     def dealCards(playerList, deck):
-        from random import randint, sample
-        cards = sample(deck, 7)
-        playerCards = dict.fromkeys(playerList, [cards])
+        from random import sample
+        playerCards = dict.fromkeys(playerList, None)
+        for keys in playerCards:
+            cards = sample(deck, 7)
+            playerCards[keys] = cards
+        return playerCards
+
+    
+    def drawCards(playerCards, deck):
+        from random import randrange
+        playerCards.append(randrange(len(deck)))
         return playerCards
 
 
@@ -95,3 +106,29 @@ class General:
             typeFlag = "reverse"
 
         return numFlag, colorFlag, typeFlag
+
+    # Verifys that the card a player tries to play will work will be added in an upcomming version.
+    def cardVerify(playerCard, lastPlayCard):
+        equivalenceVerify = False
+        numberEquivalencePlayed, colorEquivalencePlayed, typeEquivalencePlayed = General.cardParser(lastPlayCard)
+        numberEquivalenceTest, colorEquivalenceTest, typeEquivalenceTest = General.cardParser(playerCard)
+        
+        if numberEquivalencePlayed == numberEquivalenceTest:
+            equivalenceVerify = True
+        elif colorEquivalencePlayed == colorEquivalenceTest:
+            equivalenceVerify = True
+        elif typeEquivalencePlayed == typeEquivalenceTest:
+            equivalenceVerify = True
+
+        return equivalenceVerify
+
+
+    def clear():
+        from os import system, name
+        # for windows
+        if name == 'nt':
+            _ = system('cls')
+
+        # for mac and linux(here, os.name is 'posix')
+        else:
+            _ = system('clear')
