@@ -46,27 +46,31 @@ def main():
                             evaluatingCardType = False
                         else:
                             print("Sorry that card cannot be played. Pick again!")
+                    
+                    cardToPop = playerCards[playerList[0]].index(playCard)
+                    playerCards[playerList[0]].pop(cardToPop)
+
+                    nextCard = playCard
+                    cNumber, cColor, cType = gameFunctions.General.cardParser(nextCard)
+
+                    gameFunctions.General.clear()
+
+                    print("Card to play from:", nextCard)
+
+
                 else:
                     print("Sorry you do not have that card in your hand. Pick again!")
 
                 # Remove the used card from the players hand
-                cardToPop = playerCards[playerList[0]].index(playCard)
+                # cardToPop = playerCards[playerList[0]].index(playCard)
                 # playerCards[playerList[0]] = playerCards[playerList[0]].pop(cardToPop)
-                playerCards[playerList[0]].pop(cardToPop)
+                # playerCards[playerList[0]].pop(cardToPop)
 
                 if not playerCards[playerList[0]]:
                     print("Congrats", playerList[0], "You won!")
                     exit()
 
-                nextCard = playCard
-                cNumber, cColor, cType = gameFunctions.General.cardParser(nextCard)
-
-                gameFunctions.General.clear()
-
-                print("Card to play from:", nextCard)
-
         playerList = gameFunctions.Player.playerCycle(playerList)
-        # exit()
 
 
 if __name__ == "__main__":
