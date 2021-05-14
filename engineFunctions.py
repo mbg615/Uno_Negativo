@@ -1,6 +1,3 @@
-from pyglet.gl.glext_arb import PFNGLASYNCMARKERSGIXPROC
-
-
 class Deck:
     # Makes one standard Uno Deck from the cards.txt file
     def makeDeck():
@@ -13,18 +10,8 @@ class Deck:
             cardPool.append(element.strip())
         return cardPool
 
-    # Draw a card from a finite deck; The deck will refill its self if empty.
-    def drawCardFinite(deck):
-        from random import randrange
-        randNum = randrange(len(deck))
-        card = deck[randNum]
-        deck = deck.pop(randNum)
-        if len(deck) == 0:
-            deck = makeDeck()
-        return card, deck
-
     # Draw infinite cards (Does not respect a typical deck)
-    def drawCardInfinite(deck):
+    def drawCard(deck):
         from random import randrange
         randNum = randrange(len(deck))
         card = deck[randNum]
@@ -55,13 +42,6 @@ class Player:
             cards = sample(deck, 7)
             playerCards[keys] = cards
         return playerCards
-
-    
-    def drawCards(playerCards, deck):
-        from random import randrange
-        playerCards.append(randrange(len(deck)))
-        return playerCards
-
 
 class General:
     def cardParser(cardName):
