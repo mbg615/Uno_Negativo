@@ -8,6 +8,11 @@ Red 7
 Red 8
 Red 9
 Red 0
+Red Skip
+Red Reverse
+Red Draw Two
+Wild
+Draw Four
 Red 1
 Red 2
 Red 3
@@ -18,6 +23,11 @@ Red 7
 Red 8
 Red 9
 Red 0
+Red Skip
+Red Reverse
+Red Draw Two
+Wild
+Draw Four
 Yellow 1
 Yellow 2
 Yellow 3
@@ -28,6 +38,11 @@ Yellow 7
 Yellow 8
 Yellow 9
 Yellow 0
+Yellow Skip
+Yellow Reverse
+Yellow Draw Two
+Wild
+Draw Four
 Yellow 1
 Yellow 2
 Yellow 3
@@ -38,6 +53,11 @@ Yellow 7
 Yellow 8
 Yellow 9
 Yellow 0
+Yellow Skip
+Yellow Reverse
+Yellow Draw Two
+Wild
+Draw Four
 Green 1
 Green 2
 Green 3
@@ -48,6 +68,11 @@ Green 7
 Green 8
 Green 9
 Green 0
+Green Skip
+Green Reverse
+Green Draw Two
+Wild
+Draw Four
 Green 1
 Green 2
 Green 3
@@ -58,6 +83,11 @@ Green 7
 Green 8
 Green 9
 Green 0
+Green Skip
+Green Reverse
+Green Draw Two
+Wild
+Draw Four
 Blue 1
 Blue 2
 Blue 3
@@ -68,6 +98,11 @@ Blue 7
 Blue 8
 Blue 9
 Blue 0
+Blue Skip
+Blue Reverse
+Blue Draw Two
+Wild
+Draw Four
 Blue 1
 Blue 2
 Blue 3
@@ -78,3 +113,8 @@ Blue 7
 Blue 8
 Blue 9
 Blue 0
+Blue Skip
+Blue Reverse
+Blue Draw Two
+Wild
+Draw Four
