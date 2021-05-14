@@ -36,6 +36,9 @@ def main():
                 storeCard = playCard
             tNumber, tColor, tType = engineFunctions.General.cardParser(playCard)
 
+            if playCard == "exit":
+                exit()
+
             if playCard == "Draw Card":
                 drawnCard = engineFunctions.Deck.drawCard(cardDeck)
                 print("You drew a", drawnCard)
