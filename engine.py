@@ -66,7 +66,6 @@ def main():
                             exit(0)
                         else:
                             print("Sorry, that is not an option")
-                    #play_drawn = None
                 else:
                     player_cards[player_list[0]].append(drawn_card)
                     sleep(2)
