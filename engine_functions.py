@@ -1,7 +1,10 @@
+from random import randbytes
+
+
 class Deck:
     # Makes one standard Uno Deck from the cards.txt file
     def make_deck():
-        card_file = open("data/cards.txt", "r")
+        card_file = open("data/number_cards.txt", "r")
         raw_read = card_file.readlines()
 
         # Strip newline (\n)
@@ -16,6 +19,17 @@ class Deck:
         rand_num = randrange(len(deck))
         card = deck[rand_num]
         return card
+
+    # Draw multiple cards from the deck
+    def draw_multiple_cards(deck, number):
+        from random import randrange
+        drawn_cards = []
+
+        for i in range(0, number):
+            rand_num = randrange(len(deck))
+            drawn_cards.append(deck[rand_num])
+
+        return drawn_cards
     
     # Color the deck cards using ANSII escape codes
     def color_deck(deck):
@@ -65,11 +79,22 @@ class Player:
             cards = sample(deck, 7)
             player_cards[keys] = cards
         return player_cards
+    
+    # Skip the next player in line
+    def skip_player(player_list):
+        for i in range(0,2):
+            store_val = player_list[0]
+            player_list.pop(0)
+            player_list.append(store_val)
+        return player_list
+    
+    def reverse_order(player_list):
+        return player_list.reverse()
 
 
 class General:
     def card_parser(card_name):
-        # IMPORTANT - This parser relies on the standard naming scheme present
+        # IMPORTANT  - This parser relies on the standard naming scheme present
         # in the cards.txt file. If card names were changed, the parser will
         # have to be manually updated. Any cards added to the file will also have
         # to be aded to the parser inorder for the engine to know how to use them.
@@ -138,21 +163,26 @@ class General:
         else:
             _ = system('clear')
 
-    def color_cards(card_name): # Injector function to run in place of direct card calls.
+    # Injector function to run in place of direct card calls.
+    def color_cards(card_name):
         card_number, card_color, card_type = General.card_parser(card_name)
 
-        if card_color == "red":
-            colored_text = str(u"\u001b[38;5;$1m Red\u001b[0m ")
-        if card_color == "yellow":
-            colored_text = str(u"\u001b[38;5;$3m Yellow\u001b[0m ")
-        if card_color == "green":
-            colored_text = str(u"\u001b[38;5;$2m Green\u001b[0m ")
-        if card_color == "blue":
-            colored_text = str(u"\u001b[38;5;$4m Blue\u001b[0m ")
+        try:
+            if card_color == "red":
+                colored_text = str(u"\u001b[38;5;$1m Red\u001b[0m ")
+            if card_color == "yellow":
+                colored_text = str(u"\u001b[38;5;$3m Yellow\u001b[0m ")
+            if card_color == "green":
+                colored_text = str(u"\u001b[38;5;$2m Green\u001b[0m ")
+            if card_color == "blue":
+                colored_text = str(u"\u001b[38;5;$4m Blue\u001b[0m ")
 
-        if card_type == None:
-            colored_card_name = colored_text + card_number
-        if card_number == None:
-            colored_card = colored_text + card_type
+            if card_type == None:
+                colored_card_name = colored_text + card_number
+            if card_number == None:
+                colored_card = colored_text + card_type
+        except:
+            print("An error has occured with the card colorer")
+            return card_name
 
         return colored_card_name

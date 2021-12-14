@@ -4,8 +4,12 @@ from time import sleep
 
 
 def main():
+    # Print game information:
+    print("Game Version: v0.9.2 pre-Alpha")
+
     # Create player list
     player_select = int(input("How many players do you have? "))
+
     if player_select == 0:
         exit(0)
 
@@ -22,27 +26,29 @@ def main():
     initial_card = card_deck[randint(0, len(card_deck))]
     print("The starting card is:", engine_functions.General.color_cards(initial_card))
     store_card = initial_card
+    play_card = initial_card
     cNumber, cColor, cType = engine_functions.General.card_parser(initial_card)
 
     # Start the game loop
     gameRunning = True
     while gameRunning:
         currentPlayer = player_list[0]
-        print(player_list[0] + "'s turn:")
-        print(player_cards[player_list[0]])
+        print(currentPlayer + "'s turn:" + "\n", player_cards[currentPlayer])
+
+        if play_card != "Draw Card":
+            store_card = play_card
 
         # Evaluate if card is valid
         evaluating_card_type = True
         while evaluating_card_type:
             play_card = str(input("Type the card you want to play or type 'Draw Card' to draw from the deck: "))
-            if play_card != "Draw Card" or "exit":
-                store_card = play_card
-            tNumber, tColor, tType = engine_functions.General.card_parser(play_card)
 
             if play_card == "exit":
                 exit()
 
-            if play_card == "Draw Card":
+            tNumber, tColor, tType = engine_functions.General.card_parser(play_card)
+
+            if play_card == "Draw Card": # If the player wants to draw a card
                 drawn_card = engine_functions.Deck.draw_card(card_deck)
                 print("You drew a", engine_functions.General.color_cards(drawn_card))
                 
@@ -59,37 +65,122 @@ def main():
                             print("Card to play from:", engine_functions.General.color_cards(drawn_card))
                             evaluating_selection = False
                             evaluating_card_type = False
-                        if play_drawn == "No":
+
+                        elif play_drawn == "No":
                             evaluating_selection = False
                             evaluating_card_type = False
-                        if play_drawn == "exit":
+
+                        elif play_drawn == "exit":
                             exit(0)
+
                         else:
                             print("Sorry, that is not an option")
+
+                # The player drew a card they cannot play
                 else:
                     player_cards[player_list[0]].append(drawn_card)
                     sleep(2)
                     engine_functions.General.clear()
-                    print("Card to play from:", store_card)
+                    print("Card to play from:", engine_functions.General.color_cards(store_card))
                     evaluating_card_type = False
                 play_drawn = None
-            else:
+
+            elif "Skip" in play_card: # If a player plays a Skip card
                 if play_card in player_cards[player_list[0]]:
-                    if tNumber == cNumber or tColor == cColor:  # Check to make sure that play card is in the players cards
+                    if tColor == cColor or tType == cType:
+                        # Remove the card from the players card
+                        card_played = player_cards[player_list[0]].index(play_card)
+                        player_cards[player_list[0]].pop(card_played)
+
+                        next_card = play_card
+                        cNumber, cColor, cType = engine_functions.General.card_parser(next_card)
+
+                        engine_functions.General.clear()
+
+                        print("Card to play from:", engine_functions.General.color_cards(next_card))
+                        player_list = engine_functions.Player.skip_player(player_list)
+
                         evaluating_card_type = False
-                        cont_flag = True
+
                     else:
                         print("Sorry that card cannot be played. Pick again!")
-                        cont_flag = False
 
-                    if tType != None and cType != None:
-                        if tType == cType:
-                            evaluating_card_type = False
-                            cont_flag = True
-                        else:
-                            print("Sorry that card cannot be played. Pick again!")
-                            cont_flag = False
-                    if cont_flag == True:
+                else: 
+                    print("Sorry you do not have that card in your hand. Pick again!")
+
+            elif "Reverse" in play_card:
+                if play_card in player_cards[player_list[0]]:
+                    if tColor == cColor or tType == cType:
+                        # Remove the card from the players card
+                        card_played = player_cards[player_list[0]].index(play_card)
+                        player_cards[player_list[0]].pop(card_played)
+
+                        next_card = play_card
+                        cNumber, cColor, cType = engine_functions.General.card_parser(next_card)
+
+                        engine_functions.General.clear()
+
+                        print("Card to play from:", engine_functions.General.color_cards(next_card))
+                        player_list = engine_functions.Player.reverse_order(player_list)
+
+                        evaluating_card_type = False
+
+                    else:
+                        print("Sorry that card cannot be played. Pick again!")
+
+                else: 
+                    print("Sorry you do not have that card in your hand. Pick again!")
+            
+            elif "Draw Two" in play_card:
+                if play_card in player_cards[player_list[0]]:
+                    if tColor == cColor or tType == cType:
+                        # Remove the card from the players hand
+                        card_played = player_cards[player_list[0]].index(play_card)
+                        player_cards[player_list[0]].pop(card_played)
+
+                        next_card = play_card
+                        cNumber, cColor, cType = engine_functions.General.card_parser(next_card)
+
+                        print("Card to play from:", engine_functions.General.color_cards(next_card))
+
+                        player_cards[player_list[1]].extend(engine_functions.Deck.draw_multiple_cards(card_deck, 2))
+
+                        evaluating_card_type = False
+                        draw_two_flag = True
+
+                    else:
+                        print("Sorry that card cannot be played. Pick again!")
+
+                else:
+                     print("Sorry you do not have that card in your hand. Pick again!")
+            
+            elif play_card == "Draw Four": # If the player plays a Draw Four
+                if play_card in player_cards[player_list[0]]:
+                    # Remove the card from the players hand
+                        card_played = player_cards[player_list[0]].index(play_card)
+                        player_cards[player_list[0]].pop(card_played)
+
+                        next_card = play_card
+                        cNumber = cType = "Any"
+                        cColor = str(input("What color do you choose? (Red, Yellow, Green, Blue): "))
+
+                        print("Card to play from:", engine_functions.General.color_cards(cColor + next_card))
+
+                        player_cards[player_list[1]].extend(engine_functions.Deck.draw_multiple_cards(card_deck, 4))
+
+                        evaluating_card_type = False
+                        draw_four_flag = True
+
+                else:
+                    print("Sorry you do not have that card in your hand. Pick again!")
+            
+            elif play_card == "Wild":
+                pass
+
+            else: # If the player plays a number card
+                store_card = play_card
+                if play_card in player_cards[player_list[0]]:
+                    if tNumber == cNumber or tColor == cColor:  # Check to make sure that play card is in the players cards
                         # Remove the used card from the players hand
                         card_played = player_cards[player_list[0]].index(play_card)
                         player_cards[player_list[0]].pop(card_played)
@@ -100,14 +191,17 @@ def main():
                         engine_functions.General.clear()
 
                         print("Card to play from:", engine_functions.General.color_cards(next_card))
-                        cont_flag = None
+                        evaluating_card_type = False
+
+                    else:
+                        print("Sorry that card cannot be played. Pick again!")
 
                 else: 
                     print("Sorry you do not have that card in your hand. Pick again!")
 
-                if not player_cards[player_list[0]]:
-                    print("Congrats", player_list[0], "You won!")
-                    exit()
+        if not player_cards[player_list[0]]: # Stops the game if the players hand is empty
+            print("Congrats", player_list[0], "You won!")
+            exit()
 
         player_list = engine_functions.Player.player_cycle(player_list)
 
