@@ -14,10 +14,10 @@ Uno Negativo GUI development has stopped until further notice. The game engine w
 # How to use
 - `git clone` or download the project.
 - Change into the folder
-- run `python3 main.py --no_gui`
+- run `python3 main.py`
 
 # Current Version Changelog
-Uno Negativo v0.9.2 pre-Alpha
+Uno Negativo v0.9.2.1 pre-Alpha
 - Fixed an issue when players draw cards back to back
 - Started work on the "advanced" cards
 - Refactored the code
