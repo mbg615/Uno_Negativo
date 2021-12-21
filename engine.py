@@ -5,12 +5,13 @@ from time import sleep
 
 def main():
     # Print game information:
+    engine_functions.General.clear()
     print("Game Version: v0.9.2 pre-Alpha")
 
     # Create player list
     player_select = int(input("How many players do you have? "))
 
-    if player_select == 0:
+    if player_select <= 0:
         exit(0)
 
     player_list = engine_functions.Player.player_list(player_select)
@@ -24,14 +25,25 @@ def main():
     # Game Setup
     engine_functions.General.clear()
     initial_card = card_deck[randint(0, len(card_deck))]
+    while initial_card == "Draw Four": # Protect against use as a starting card
+        initial_card = card_deck[randint(0, len(card_deck))]
+    if initial_card == "Wild": # Allow first player to choose the card starting color
+        pass
     print("The starting card is:", engine_functions.General.color_cards(initial_card))
-    store_card = initial_card
-    play_card = initial_card
+    store_card = play_card = next_card = initial_card
     cNumber, cColor, cType = engine_functions.General.card_parser(initial_card)
 
     # Start the game loop
     gameRunning = True
     while gameRunning:
+        if draw_two_flag == True:
+            print("You drew 2 cards")
+            player_list = engine_functions.Player.player_cycle(player_list)
+
+        elif draw_four_flag == True:
+            print("You drew 4 cards")
+            player_list = engine_functions.Player.player_cycle(player_list)
+
         currentPlayer = player_list[0]
         print(currentPlayer + "'s turn:" + "\n", player_cards[currentPlayer])
 
@@ -54,7 +66,7 @@ def main():
                 
                 tNumber, tColor, tType = engine_functions.General.card_parser(drawn_card)
 
-                if tNumber == cNumber or tColor == cColor:
+                if engine_functions.General.updated_card_verify(play_card, play_card):
                     evaluating_selection = True
                     while evaluating_selection:
                         play_drawn = input("Do you want to play the card? (Yes or No) ")
@@ -87,7 +99,7 @@ def main():
 
             elif "Skip" in play_card: # If a player plays a Skip card
                 if play_card in player_cards[player_list[0]]:
-                    if tColor == cColor or tType == cType:
+                    if engine_functions.General.updated_card_verify(play_card, play_card):
                         # Remove the card from the players card
                         card_played = player_cards[player_list[0]].index(play_card)
                         player_cards[player_list[0]].pop(card_played)
@@ -110,7 +122,7 @@ def main():
 
             elif "Reverse" in play_card:
                 if play_card in player_cards[player_list[0]]:
-                    if tColor == cColor or tType == cType:
+                    if engine_functions.General.updated_card_verify(play_card, play_card):
                         # Remove the card from the players card
                         card_played = player_cards[player_list[0]].index(play_card)
                         player_cards[player_list[0]].pop(card_played)
@@ -133,7 +145,7 @@ def main():
             
             elif "Draw Two" in play_card:
                 if play_card in player_cards[player_list[0]]:
-                    if tColor == cColor or tType == cType:
+                    if engine_functions.General.updated_card_verify(play_card, play_card):
                         # Remove the card from the players hand
                         card_played = player_cards[player_list[0]].index(play_card)
                         player_cards[player_list[0]].pop(card_played)
@@ -164,7 +176,8 @@ def main():
                         cNumber = cType = "Any"
                         cColor = str(input("What color do you choose? (Red, Yellow, Green, Blue): "))
 
-                        print("Card to play from:", engine_functions.General.color_cards(cColor + next_card))
+                        engine_functions.General.clear()
+                        print("Card to play from:", engine_functions.General.color_cards(cColor + " " + next_card))
 
                         player_cards[player_list[1]].extend(engine_functions.Deck.draw_multiple_cards(card_deck, 4))
 
@@ -180,7 +193,7 @@ def main():
             else: # If the player plays a number card
                 store_card = play_card
                 if play_card in player_cards[player_list[0]]:
-                    if tNumber == cNumber or tColor == cColor:  # Check to make sure that play card is in the players cards
+                    if engine_functions.General.updated_card_verify(play_card, play_card):
                         # Remove the used card from the players hand
                         card_played = player_cards[player_list[0]].index(play_card)
                         player_cards[player_list[0]].pop(card_played)

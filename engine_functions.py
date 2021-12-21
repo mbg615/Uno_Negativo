@@ -4,7 +4,7 @@ from random import randbytes
 class Deck:
     # Makes one standard Uno Deck from the cards.txt file
     def make_deck():
-        card_file = open("data/number_cards.txt", "r")
+        card_file = open("data/all_cards.txt", "r")
         raw_read = card_file.readlines()
 
         # Strip newline (\n)
@@ -95,7 +95,7 @@ class Player:
 class General:
     def card_parser(card_name):
         # IMPORTANT  - This parser relies on the standard naming scheme present
-        # in the cards.txt file. If card names were changed, the parser will
+        # in the *_cards.txt files. If card names were changed, the parser will
         # have to be manually updated. Any cards added to the file will also have
         # to be aded to the parser inorder for the engine to know how to use them.
 
@@ -125,13 +125,16 @@ class General:
         # Find the type of Card
         if "Wild" in card_name:
             type_flag = "wild"
+            num_flag = color_flag = "any"
         elif "Draw" in card_name:
             if "Two" in card_name:
                 type_flag = "draw2"
             elif "Four" in card_name:
                 type_flag = "draw4"
+                num_flag = color_flag = "any"
         elif "Skip" in card_name:
             type_flag = "skip"
+            num_flag = "any"
         elif "Reverse" in card_name:
             type_flag = "reverse"
 
@@ -152,6 +155,23 @@ class General:
 
         return equivalence_verify
 
+    def updated_card_verify(card_to_test, previous_card):
+        cards_are_compatible = False
+        test_number, test_color, test_type = General.card_parser(card_to_test)
+        current_number, current_color, current_type = General.card_parser(previous_card)
+
+        if test_number == "any" or test_color == "any":
+            cards_are_compatible = True
+        elif test_number == current_number:
+            cards_are_compatible = True
+        elif test_color == current_color:
+            cards_are_compatible = True
+        elif test_type == current_type:
+            cards_are_compatible = True
+
+        return cards_are_compatible
+
+
 
     def clear():
         from os import system, name
@@ -164,8 +184,12 @@ class General:
             _ = system('clear')
 
     # Injector function to run in place of direct card calls.
+    # Only works for macOS?
     def color_cards(card_name):
         card_number, card_color, card_type = General.card_parser(card_name)
+
+        # Fallback for debugging
+        colored_card_name = card_name
 
         try:
             if card_color == "red":
