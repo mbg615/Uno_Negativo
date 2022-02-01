@@ -1,5 +1,5 @@
 import engine_functions
-from random import randint, shuffle
+from random import randint
 from time import sleep
 
 
@@ -23,12 +23,18 @@ def main():
     player_cards = engine_functions.Player.deal_cards(player_list, card_deck)
 
     # Game Setup
+    draw_two_flag = True
+    draw_four_flag = True
+    
     engine_functions.General.clear()
     initial_card = card_deck[randint(0, len(card_deck))]
-    while initial_card == "Draw Four": # Protect against use as a starting card
+
+    # Handle special cases for initial cards.
+    while initial_card == "Draw Four":
         initial_card = card_deck[randint(0, len(card_deck))]
-    if initial_card == "Wild": # Allow first player to choose the card starting color
-        pass
+    if initial_card == "Wild":
+        initial_card = str(input("What color do you want to start with? (Red, Yellow, Green, Blue): "), "Wild")
+
     print("The starting card is:", engine_functions.General.color_cards(initial_card))
     store_card = play_card = next_card = initial_card
     cNumber, cColor, cType = engine_functions.General.card_parser(initial_card)
